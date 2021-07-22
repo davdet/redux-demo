@@ -1,41 +1,40 @@
-import { createStore } from "redux";
+import { createSlice, configureStore } from "@reduxjs/toolkit";
 
 // stato iniziale
 const initialState = { counter: 0, showCounter: true };
 
-// funzione reducer per lo stato del counter
-const counterReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case "increment":
-      return {
-        counter: state.counter + 1,
-        showCounter: state.showCounter,
-      };
-    case "increase":
-      return {
-        counter: state.counter + action.amount,
-        showCounter: state.showCounter,
-      };
-    case "decrement":
-      return {
-        counter: state.counter - 1,
-        showCounter: state.showCounter,
-      };
-    case "reset":
-      return {
-        counter: 0,
-        showCounter: state.showCounter,
-      };
-    case "toggle":
-      return {
-        counter: state.counter,
-        showCounter: !state.showCounter,
-      };
-    default:
-      return state;
-  }
-};
+// creazione della state slice per il counter.
+// NB: utilizzando redux-toolkit è possibile modificare lo stato in una maniera che
+// sembrerebbe diretta, ma in realtà non lo è (è solo un'astrazione)
+const counterSlice = createSlice({
+  name: "counter",
+  initialState,
+  reducers: {
+    increment(state) {
+      state.counter++;
+    },
+    increase(state, action) {
+      state.counter = state.counter + action.payload;
+    },
+    decrement(state) {
+      state.counter--;
+    },
+    reset(state) {
+      state.counter = 0;
+    },
+    toggle(state) {
+      state.showCounter = !state.showCounter;
+    },
+  },
+});
 
-const store = createStore(counterReducer);
+// per fare il merge di più reducers in un unico reducer si usa la funzione configureStore messa a disposizione da redux-toolkit
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+
+// utilizzando redux-toolkit le actions vengono create automaticamente con un identificatore univoco,
+// e sono accessibili utilizzando le chiavi impostate nella sezione reducers di createSlice
+export const counterActions = counterSlice.actions;
 
 export default store;
