@@ -6,13 +6,13 @@ import classes from "./Counter.module.css";
 const Counter = () => {
   const dispatch = useDispatch();
 
-  // estrae state.counter dallo store
+  // estrae state.counter.counter dallo store
   const counter = useSelector((state) => {
-    return state.counter;
+    return state.counter.counter;
   });
-  // estrae state.showCounter dallo store
+  // estrae state.counter.showCounter dallo store
   const show = useSelector((state) => {
-    return state.showCounter;
+    return state.counter.showCounter;
   });
 
   const incrementHandler = () => {
